@@ -1,7 +1,7 @@
 robotframework-testrail
 =======================
 
-This script publishes results of Robot Framework in TestRail.
+This script creates/updates Test Suite and Test Case templates from Robot Framework tests, and publishes results to a new Test Plan in TestRail. 
 
 The standard process is:
 Robot Framework execution => `output.xml` => This script => TestRail API
@@ -26,28 +26,29 @@ Configuration
 
 ### Robot Framework
 
-To create the `TEST_CASE_ID`  you have the possibility to use the metadata or the test's tag, `the priority is done to the tag and not the metadata`.
+You must add a metadata tag to your test suite file called `UPLOAD_TO_TESTRAIL` and label your Test Cases starting with TC_<TEST_CASE_NUMBER). The TEST_CASE_NUMBER should be in ascending order from 1-n, n=number of Test Cases in each Test Suite.  
 
+Format of Test Case Title :
 
-**With Metadata:**
+* `TC_` + unique integer + space + title of your Test Case: `TC_2 Verify Toggle Button`, `TC_2 Validate Login`
+* unique integer: 1 - n, n=number of Test Cases in each Test Suite. Each Test Case should be labeled with an integer in ascending order. 
 
-If you want to create only one `TEST_CASE_ID` for you test, use the following method:
-
-Create a metadata `TEST_CASE_ID` in your test containing TestRail ID.
-
-Format of `TEST_CASE_ID` is :
-* Descriptor + an integer: `C1234`, `TestRail5678`
-* An integer: 1234, 5678
 
 **Example**:
 ```robotframework
 *** Settings ***
-Metadata          TEST_CASE_ID    C345
+Metadata          UPLOAD_TO_TESTRAIL 
 
 *** Test Cases ***
 
-Test Example
-    Log    ${SUITE METADATA['TEST_CASE_ID']}
+TC_1 Verify buying mode toggle label   
+    Launch The Application in buying mode
+TC_2 Verify the buying and selling mode 
+    Go To    ${HOMEPAGE}
+TC_3 Verify all the tabs labels 
+    Launch the application in buying mode
+    click on get ready tab in buying mode
+    click on Browse property tab in buying mode
 ```
 
 In this case, the result of Test Case C345 will be 'passed' in TestRail.
@@ -119,9 +120,7 @@ Usage
 ```
 usage: robotframework2testrail.py [-h] --tr-config CONFIG
                                   [--tr-password API_KEY]
-                                  [--tr-version VERSION] [--dryrun]
-                                  [--tr-dont-publish-blocked]
-                                  (--tr-run-id RUN_ID | --tr-plan-id PLAN_ID)
+                                  [--tr-pid PROJECT_ID | --tr-plan-id PLAN_ID]
                                   xml_robotfwk_output
 
 Tool to publish Robot Framework results in TestRail
@@ -134,31 +133,14 @@ optional arguments:
   --tr-config CONFIG    TestRail configuration file.
   --tr-password API_KEY
                         API key of TestRail account with write access.
-  --tr-version VERSION  Indicate a version in Test Case result.
-  --dryrun              Run script but don't publish results.
-  --tr-dont-publish-blocked
-                        Do not publish results of "blocked" testcases in
-                        TestRail.
-  --tr-run-id RUN_ID    Identifier of Test Run, that appears in TestRail.
-  --tr-plan-id PLAN_ID  Identifier of Test Plan, that appears in TestRail.
+  --tr-pid PROJECT_ID  Identifier of TestRail Project, that appears in TestRail.
 ```
 
 ### Example
 
 ```bash
-# Dry run
-python robotframework2testrail.py --tr-config=testrail.cfg --dryrun --tr-run-id=196 output.xml
 
-# Publish in Test Run #196
-python robotframework2testrail.py --tr-config=testrail.cfg --tr-run-id=196 output.xml
+# Publish a Test Plan for Project #1 a
+python robotResult2Testrail.py --tr-config=testrail.cfg --tr-pid=1 output.xml
 
-# Publish in Test Plan #200 and dont publish "blocked" Test Cases in TestRail
-python robotframework2testrail.py --tr-config=testrail.cfg --tr-plan-id=200 --tr-dont-publish-blocked output.xml
 
-# Publish in Test Plan #200 with version '1.0.2'
-python robotframework2testrail.py --tr-config=testrail.cfg --tr-plan-id=200 --tr-version=1.0.2 output.xml
-
-# Publish with api key in command line
-python robotframework2testrail.py --tr-config=testrail.cfg --tr-password azertyazertyqsdfqsdf --tr-plan-id=200 output.xml
-
-```
