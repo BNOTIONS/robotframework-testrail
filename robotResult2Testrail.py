@@ -7,6 +7,8 @@ import configparser
 import argparse
 import testrail
 import re
+import sys 
+import logging 
 
 from colorama import Fore, Style, init
 from robot.api import ExecutionResult, ResultVisitor
