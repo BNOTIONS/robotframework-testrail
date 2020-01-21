@@ -1,19 +1,14 @@
-import sys,getopt
-import xml.dom.minidom
 import ssl
 import os
-import fnmatch
 import datetime
 import configparser
 import argparse
 import testrail
 import re
 
-
 from colorama import Fore, Style, init
 from robot.api import ExecutionResult, ResultVisitor
 from testrail_utils import TestRailApiUtils
-from pprint import *
 
 COMMENT_SIZE_LIMIT = 1000
 
