@@ -141,6 +141,6 @@ optional arguments:
 ```bash
 
 # Publish a Test Plan for Project #1 a
-python robotResult2Testrail.py --tr-config=testrail.cfg --tr-pid=1 output.xml
+python robotResult2Testrail.py --tr-config=testrail.cfg --tr-password samplepassword123 --tr-pid=1 output.xml
 
 

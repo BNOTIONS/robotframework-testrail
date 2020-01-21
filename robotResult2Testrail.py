@@ -4,11 +4,11 @@ import ssl
 import os
 import datetime
 import configparser
+import logging 
 import argparse
 import testrail
+import sys
 import re
-import sys 
-import logging 
 
 from colorama import Fore, Style, init
 from robot.api import ExecutionResult, ResultVisitor
@@ -190,6 +190,11 @@ def options():
         required=True,
         help='TestRail configuration file.')
     parser.add_argument(
+        '--tr-password', 
+        dest='password', 
+        metavar='API_KEY', 
+        help='API key of TestRail account with write access.')
+    parser.add_argument(
         '--tr-pid',
         dest='pid',
         action='store',
@@ -212,7 +217,7 @@ def uploadTestSuite():
     CONFIG.read_file(ARGUMENTS.config)
     URL = CONFIG.get('API', 'url')
     EMAIL = CONFIG.get('API', 'email')
-    PASSWORD = CONFIG.get('API', 'password')
+    PASSWORD = ARGUMENTS.password
     #to connect to testrail 
     API = TestRailApiUtils(URL)
     API.user = EMAIL
