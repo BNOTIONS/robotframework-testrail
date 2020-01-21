@@ -1,6 +1,3 @@
-"""WIP: Automating Testrail test suite and test case template creation 
-along with test plan result upload based on Robot test suites """
-
 import sys,getopt
 import xml.dom.minidom
 import ssl
