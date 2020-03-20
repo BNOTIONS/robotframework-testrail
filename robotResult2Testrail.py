@@ -57,11 +57,8 @@ CONSOLE_HANDLER.setLevel(logging.DEBUG)
 CONSOLE_HANDLER.setFormatter(logging.Formatter('%(message)s'))
 logging.getLogger().addHandler(CONSOLE_HANDLER)
 
-
-
 class TestRailResultVisitor(ResultVisitor):
     """ Implement a `Visitor` that retrieves TestRail Tags, Test Suite and Test Case Data from Robot Framework Result """
-    
     
     def __init__(self):
         """ Init, list of suites and test cases, to be stored when suite data is retrieved  """
@@ -175,9 +172,6 @@ def update_test_cases(api, tr_testcases, r_testcases, suite):
     else: 
         logging.info('    There Are No Robot Test Cases Available To Add/Update To Testrail Suite #%s', suite['name'])
         
-                
-
-
 def update_robot_suites(api, testsuites, testcases, pid):
     """ Updates existing/add test suites and their test cases on Testrail 
         :param api: Client to TestRail API
@@ -223,14 +217,12 @@ def update_robot_suites(api, testsuites, testcases, pid):
             #add/update test cases to suite
             update_test_cases(api, api.get_cases(pid, suiteid), testcases, suite)
 
-        
     else: 
         logging.info('There Are No Robot Test Suites Available to Publish To Testrail Project #%d', pid)
         return False   
     
     return True  
-  
-    
+
 def create_testrail_testplan(api, testsuites, testcases, pid):
     """ Creates new test plan on Testrail and uploads Robot results to it 
         :param api: Client to TestRail API
@@ -267,7 +259,6 @@ def create_testrail_testplan(api, testsuites, testcases, pid):
         logging.error('Could Not Create Testrail Test Plan For Project #%d - Testrail API Error - %s', pid, str(error))
         
     return True 
-
               
 def options():
     
