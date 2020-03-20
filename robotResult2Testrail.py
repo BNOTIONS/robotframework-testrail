@@ -1,6 +1,6 @@
-
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-import ssl
+
 """ This module publishes Robot Framework results to Testrail.
 
 Once robot test suites are executed, this module is run to create a new test plan containing results of those test suites. 
